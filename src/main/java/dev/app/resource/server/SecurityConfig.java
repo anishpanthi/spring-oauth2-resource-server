@@ -2,8 +2,10 @@ package dev.app.resource.server;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
@@ -17,7 +19,10 @@ public class SecurityConfig {
     http.authorizeHttpRequests(
             request ->
                 request.requestMatchers("/actuator/**").permitAll().anyRequest().authenticated())
-        .csrf(AbstractHttpConfigurer::disable);
-    return http.build();
+        .oauth2ResourceServer(
+            oauth -> oauth.jwt(Customizer.withDefaults()))
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    return http.csrf(AbstractHttpConfigurer::disable).build();
   }
 }

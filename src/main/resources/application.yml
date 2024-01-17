@@ -11,3 +11,10 @@ logging:
   level:
     org.springframework.security: debug
     dev.app.resource.server: debug
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: <replace_with_jwk_url>
