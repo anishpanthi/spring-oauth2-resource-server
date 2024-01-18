@@ -1,0 +1,28 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    org.springframework.security: debug
+    dev.app.resource.server: debug
+
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          azure:
+            issuer-uri: https://login.microsoftonline.com/0590543f-0331-4b9c-89cd-b95a19fcf9a1/v2.0
+        registration:
+          azure:
+            provider: azure
+            client-id: da51b1bd-0b28-4d3e-a391-3e928033bd30
+            client-secret: 78N8Q~3QFzMhe-jbahK~iAhuCvCXN2EMQIqkSbRF
+            scope: openid, profile, email, offline_access
+            redirect-uri: http://localhost:8080/login/oauth2/code/
