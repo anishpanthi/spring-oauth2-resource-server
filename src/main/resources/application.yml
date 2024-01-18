@@ -18,11 +18,11 @@ spring:
       client:
         provider:
           azure:
-            issuer-uri: https://login.microsoftonline.com/0590543f-0331-4b9c-89cd-b95a19fcf9a1/v2.0
+            issuer-uri: '***'
         registration:
           azure:
             provider: azure
-            client-id: da51b1bd-0b28-4d3e-a391-3e928033bd30
-            client-secret: 78N8Q~3QFzMhe-jbahK~iAhuCvCXN2EMQIqkSbRF
+            client-id: '***'
+            client-secret: '***'
             scope: openid, profile, email, offline_access
             redirect-uri: http://localhost:8080/login/oauth2/code/
