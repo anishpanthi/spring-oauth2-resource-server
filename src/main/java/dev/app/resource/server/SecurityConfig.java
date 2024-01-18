@@ -20,6 +20,10 @@ public class SecurityConfig {
 
   private final ApiAuthenticationConverter apiAuthenticationConverter;
 
+  private final ApiAuthenticationEntryPoint apiAuthenticationEntryPoint;
+
+  private final ApiAccessDeniedHandler jwtAccessDeniedHandler;
+
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(
@@ -30,6 +34,8 @@ public class SecurityConfig {
               oauth.jwt(
                   jwtConfigurer ->
                       jwtConfigurer.jwtAuthenticationConverter(apiAuthenticationConverter));
+              oauth.authenticationEntryPoint(apiAuthenticationEntryPoint);
+              oauth.accessDeniedHandler(jwtAccessDeniedHandler);
             });
 
     return http.csrf(AbstractHttpConfigurer::disable).build();
