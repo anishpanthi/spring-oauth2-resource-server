@@ -18,11 +18,11 @@ spring:
       client:
         provider:
           azure:
-            issuer-uri: '***'
+            issuer-uri: '***'     # https://login.microsoftonline.com/{tenantId}/v2.0
         registration:
           azure:
             provider: azure
-            client-id: '***'
-            client-secret: '***'
+            client-id: '***'      # Application (client) ID
+            client-secret: '***'  # Client secret
             scope: openid, profile, email, offline_access
             redirect-uri: http://localhost:8080/login/oauth2/code/
