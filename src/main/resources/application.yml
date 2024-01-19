@@ -18,3 +18,4 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: <replace_with_jwk_url>
+          issuer-uri: <replace_with_issuer_url>
