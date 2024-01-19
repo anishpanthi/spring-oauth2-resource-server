@@ -1,5 +1,6 @@
 package dev.app.resource.server;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -12,7 +13,10 @@ import org.springframework.security.web.SecurityFilterChain;
  * @author Anish Panthi
  */
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+  private final ApiAuthenticationConverter apiAuthenticationConverter;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -20,9 +24,12 @@ public class SecurityConfig {
             request ->
                 request.requestMatchers("/actuator/**").permitAll().anyRequest().authenticated())
         .oauth2ResourceServer(
-            oauth -> oauth.jwt(Customizer.withDefaults()))
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            oauth -> {
+              oauth.jwt(
+                  jwtConfigurer ->
+                      jwtConfigurer.jwtAuthenticationConverter(apiAuthenticationConverter));
+            });
+
     return http.csrf(AbstractHttpConfigurer::disable).build();
   }
 }
