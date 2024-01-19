@@ -14,7 +14,8 @@ import java.util.Map;
 @RequestMapping("/api")
 public class ApiController {
 
-  @PreAuthorize("hasRole('ROLE_USER')")
+  @PreAuthorize("hasAuthority('SCOPE_my_data')")
+//  @PreAuthorize("hasRole('SCOPE_my_data')")
   @GetMapping("/greet")
   public Map<String, String> greet() {
     return Map.of(
