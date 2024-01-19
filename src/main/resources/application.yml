@@ -17,5 +17,5 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-#          jwk-set-uri: <replace_with_jwk_url>
-          jwk-set-uri: <replace_with_L7_url>
+          jwk-set-uri: <replace_with_jwk_url>
+          issuer-uri: <replace_with_issuer_url>
