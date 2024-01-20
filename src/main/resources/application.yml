@@ -25,4 +25,4 @@ spring:
             client-id: '***'      # Application (client) ID
             client-secret: '***'  # Client secret
             scope: openid, profile, email, offline_access
-            redirect-uri: http://localhost:8080/login/oauth2/code/
+            redirect-uri: http://localhost:8080/login/oauth2/code/azuread
