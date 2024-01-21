@@ -19,6 +19,8 @@ spring:
         provider:
           azure:
             issuer-uri: '***'     # https://login.microsoftonline.com/{tenantId}/v2.0
+          okta:
+            issuer-uri: '***'     # https://{yourOktaDomain}/oauth2/default
         registration:
           azure:
             provider: azure
@@ -26,3 +28,11 @@ spring:
             client-secret: '***'  # Client secret
             scope: openid, profile, email, offline_access
             redirect-uri: http://localhost:8080/login/oauth2/code/azuread
+            client-name: Microsoft Entra ID
+          okta:
+            provider: okta
+            client-id: '***'      # Client ID
+            client-secret: '***'  # Client secret
+            scope: openid, profile, email, offline_access
+            redirect-uri: http://localhost:8080/login/oauth2/code/okta
+            client-name: Okta
