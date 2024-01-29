@@ -17,22 +17,34 @@ spring:
     oauth2:
       client:
         provider:
-          azure:
-            issuer-uri: '***'     # https://login.microsoftonline.com/{tenantId}/v2.0
+          azure-ad:
+            issuer-uri: https://login.microsoftonline.com/1b286c40-c2fd-46d5-a553-b6502b89f42d/v2.0
           okta:
-            issuer-uri: '***'     # https://{yourOktaDomain}/oauth2/default
+            issuer-uri: https://dev-09980417.okta.com
+          azure-b2c:
+            authorization-uri: https://pamiadu.b2clogin.com/pamiadu.onmicrosoft.com/b2c_1_pamiadu/oauth2/v2.0/authorize
+            jwk-set-uri: https://pamiadu.b2clogin.com/pamiadu.onmicrosoft.com/b2c_1_pamiadu/discovery/v2.0/keys
+            token-uri: https://pamiadu.b2clogin.com/pamiadu.onmicrosoft.com/b2c_1_pamiadu/oauth2/v2.0/token
         registration:
-          azure:
-            provider: azure
-            client-id: '***'      # Application (client) ID
-            client-secret: '***'  # Client secret
+          azure-b2c:
+            provider: azure-b2c
+            client-id:
+            client-secret:
+            scope: openid
+            redirect-uri: http://localhost:8080/api/secure
+            client-name: Microsoft B2C Login
+            authorization-grant-type: authorization_code
+          azure-ad:
+            provider: azure-ad
+            client-id:
+            client-secret:
             scope: openid, profile, email, offline_access
             redirect-uri: http://localhost:8080/login/oauth2/code/azuread
-            client-name: Microsoft Entra ID
+            client-name: Microsoft Entra ID (Azure AD)
           okta:
             provider: okta
-            client-id: '***'      # Client ID
-            client-secret: '***'  # Client secret
+            client-id:
+            client-secret:
             scope: openid, profile, email, offline_access
             redirect-uri: http://localhost:8080/login/oauth2/code/okta
             client-name: Okta
