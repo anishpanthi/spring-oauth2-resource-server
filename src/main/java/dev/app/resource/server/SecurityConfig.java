@@ -35,6 +35,7 @@ public class SecurityConfig {
                     .permitAll()
                     .anyRequest()
                     .authenticated())
+//            .oauth2Login(Customizer.withDefaults());
         .oauth2Login(oauth2 -> oauth2.tokenEndpoint(tokenEndpoint -> tokenEndpoint.accessTokenResponseClient(this::getTokenResponse)));
     return http.build();
   }

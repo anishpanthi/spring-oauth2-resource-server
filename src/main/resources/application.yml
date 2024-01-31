@@ -31,7 +31,7 @@ spring:
             client-id:
             client-secret:
             scope: openid
-            redirect-uri: http://localhost:8080/api/secure
+            redirect-uri: http://localhost:8080/login/oauth2/code/azure-b2c
             client-name: Microsoft B2C Login
             authorization-grant-type: authorization_code
           azure-ad:
