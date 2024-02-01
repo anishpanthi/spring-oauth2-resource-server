@@ -16,5 +16,5 @@ Accept: application/json
 GET http://localhost:8080/api/greet
 Accept: application/json
 Authorization: Bearer
-
+auth-type: nonOAuth
 ###
