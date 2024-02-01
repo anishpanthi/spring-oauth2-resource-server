@@ -26,19 +26,19 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    JwtIssuerAuthenticationManagerResolver authenticationManagerResolver =
-        JwtIssuerAuthenticationManagerResolver.fromTrustedIssuers(
-            "https://dev-09980417.okta.com/oauth2/default");
+//    JwtIssuerAuthenticationManagerResolver authenticationManagerResolver =
+//        JwtIssuerAuthenticationManagerResolver.fromTrustedIssuers(
+//            "https://dev-09980417.okta.com/oauth2/default");
 
     http.authorizeHttpRequests(
             request ->
                 request.requestMatchers("/actuator/**").permitAll().anyRequest().authenticated())
         .oauth2ResourceServer(
             oauth -> {
-              oauth.authenticationManagerResolver(authenticationManagerResolver);
-//              oauth.jwt(
-//                  jwtConfigurer ->
-//                      jwtConfigurer.jwtAuthenticationConverter(apiAuthenticationConverter));
+//              oauth.authenticationManagerResolver(authenticationManagerResolver);
+              oauth.jwt(
+                  jwtConfigurer ->
+                      jwtConfigurer.jwtAuthenticationConverter(apiAuthenticationConverter));
               oauth.authenticationEntryPoint(apiAuthenticationEntryPoint);
               oauth.accessDeniedHandler(jwtAccessDeniedHandler);
             });
