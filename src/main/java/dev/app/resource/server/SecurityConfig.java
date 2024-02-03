@@ -1,26 +1,20 @@
 package dev.app.resource.server;
 
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.ParseException;
+import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationManagerResolver;
 import org.springframework.security.authentication.ProviderManager;
@@ -33,6 +27,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestClient;
 
 /**
  * @author Anish Panthi
@@ -42,12 +37,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 @Log4j2
 public class SecurityConfig {
-
-  private final ApiAuthenticationConverter apiAuthenticationConverter;
-
-  private final ApiAuthenticationEntryPoint apiAuthenticationEntryPoint;
-
-  private final ApiAccessDeniedHandler jwtAccessDeniedHandler;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -61,12 +50,7 @@ public class SecurityConfig {
                 request.requestMatchers("/actuator/**").permitAll().anyRequest().authenticated())
         .oauth2ResourceServer(
             oauth -> {
-                            oauth.authenticationManagerResolver(authenticationManagerResolver);
-//              oauth.jwt(
-//                  jwtConfigurer ->
-//                      jwtConfigurer.jwtAuthenticationConverter(apiAuthenticationConverter));
-              oauth.authenticationEntryPoint(apiAuthenticationEntryPoint);
-              oauth.accessDeniedHandler(jwtAccessDeniedHandler);
+              oauth.authenticationManagerResolver(authenticationManagerResolver);
             });
 
     return http.csrf(AbstractHttpConfigurer::disable).build();
@@ -109,35 +93,54 @@ public class SecurityConfig {
       if (this.authType.equals("OAuth"))
         return JwtDecoders.fromIssuerLocation(jwkSetUri.get("OAuth")).decode(token);
       else {
+        JWTClaimsSet claims;
+        SignedJWT signedJWT;
         try {
           JWKSet jwkSet = JWKSet.load(new URI("https://apitest.hms.com/keys/v1").toURL());
-          SignedJWT signedJWT = SignedJWT.parse(token);
 
-          // Extract the JWK from the JWK Set
-          RSAKey rsaKey = (RSAKey) jwkSet.getKeyByKeyId(signedJWT.getHeader().getKeyID());
+          // TODO: Additional validation logic like signature can be added here
 
-          // Build a JWS verifier from the JWK
-          JWSVerifier verifier = new RSASSAVerifier(rsaKey.toRSAPublicKey());
+          signedJWT = SignedJWT.parse(token);
+          claims = signedJWT.getJWTClaimsSet();
+          log.info("Claims: {}", claims);
+          if (claims.getExpirationTime().toInstant().isBefore(Instant.now()))
+            throw new RuntimeException("Token has expired");
 
-          // Verify the signature
-          if (!signedJWT.verify(verifier)) {
-            // TODO: Invalid signature
+          // Get the roles of the user
+          var userId = claims.getStringClaim("uid");
+          var response =
+              RestClient.builder()
+                  .build()
+                  .get()
+                  .uri("https://apitest.hms.com/hmsuseraccesslist/?appl=tmv&env=test")
+                  .header("Authorization", userId)
+                  .retrieve()
+                  .body(UserInfo.class);
+          log.debug("Response: {}", response);
+          assert response != null;
+          String scope = "";
+          for (var group : response.group()) {
+            if (group.client().equals("console")) {
+              scope = group.role().toUpperCase();
+            }
           }
 
-          // Additional validation logic can be added here
-          JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
-          log.info("Claims: {}", claims);
-          // Validate claims, expiration, etc.
-        } catch (ParseException
-            | JOSEException
-            | IllegalArgumentException
-            | NullPointerException e) {
+          Map<String, Object> claimsMap = new HashMap<>(claims.getClaims());
+          claimsMap.put("scp", scope);
+
+          return new Jwt(
+              token,
+              claims.getIssueTime().toInstant(),
+              claims.getExpirationTime().toInstant(),
+              signedJWT.getHeader().toJSONObject(),
+              claimsMap);
+
+        } catch (ParseException | IllegalArgumentException | NullPointerException e) {
           // TODO: Handle exception or log the error
+          throw new RuntimeException(e);
         } catch (IOException | URISyntaxException e) {
           throw new RuntimeException(e);
         }
-
-        return JwtDecoders.fromIssuerLocation(jwkSetUri.get("nonOAuth")).decode(token);
       }
     }
   }

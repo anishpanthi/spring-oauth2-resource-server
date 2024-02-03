@@ -20,6 +20,7 @@ public record UserInfo(
     String app,
     String env,
     List<Group> group,
+    String scp,
     Long iat,
     Long exp,
     Long nbf) {}
