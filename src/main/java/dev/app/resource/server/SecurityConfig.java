@@ -72,18 +72,18 @@ public class SecurityConfig {
               "https://apitest.hms.com/keys/v1");
 
       var authType = request.getHeader("auth-type");
-      JwtDecoder jwtDecoder = new CustomJwtDecoder(jwkSetUriMap, authType);
+      JwtDecoder jwtDecoder = new ApiJwtDecoder(jwkSetUriMap, authType);
       JwtAuthenticationProvider authenticationProvider = new JwtAuthenticationProvider(jwtDecoder);
       return new ProviderManager(authenticationProvider);
     }
   }
 
-  static class CustomJwtDecoder implements JwtDecoder {
+  static class ApiJwtDecoder implements JwtDecoder {
 
     private final Map<String, String> jwkSetUri;
     private final String authType;
 
-    CustomJwtDecoder(Map<String, String> jwkSetUri, String authType) {
+    ApiJwtDecoder(Map<String, String> jwkSetUri, String authType) {
       this.jwkSetUri = jwkSetUri;
       this.authType = authType;
     }
@@ -97,8 +97,7 @@ public class SecurityConfig {
         SignedJWT signedJWT;
         try {
           JWKSet jwkSet = JWKSet.load(new URI("https://apitest.hms.com/keys/v1").toURL());
-
-          // TODO: Additional validation logic like signature can be added here
+          // TODO: Validate signature before parsing the token
 
           signedJWT = SignedJWT.parse(token);
           claims = signedJWT.getJWTClaimsSet();
@@ -135,10 +134,11 @@ public class SecurityConfig {
               signedJWT.getHeader().toJSONObject(),
               claimsMap);
 
-        } catch (ParseException | IllegalArgumentException | NullPointerException e) {
-          // TODO: Handle exception or log the error
-          throw new RuntimeException(e);
-        } catch (IOException | URISyntaxException e) {
+        } catch (ParseException
+            | IllegalArgumentException
+            | NullPointerException
+            | IOException
+            | URISyntaxException e) {
           throw new RuntimeException(e);
         }
       }
