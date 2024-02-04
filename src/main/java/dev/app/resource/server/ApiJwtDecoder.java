@@ -71,7 +71,7 @@ public class ApiJwtDecoder implements JwtDecoder {
             .ifPresent(group -> scope.set(group.role().toUpperCase()));
 
         Map<String, Object> claimsMap = new HashMap<>(claims.getClaims());
-        claimsMap.put("scp", scope);
+        claimsMap.put("scp", scope.get());
 
         return new Jwt(
             token,

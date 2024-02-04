@@ -23,4 +23,6 @@ public record UserInfo(
     String scp,
     Long iat,
     Long exp,
-    Long nbf) {}
+    Long nbf) {
+
+}
