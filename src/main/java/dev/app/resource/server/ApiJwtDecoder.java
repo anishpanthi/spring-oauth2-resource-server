@@ -2,8 +2,6 @@ package dev.app.resource.server;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.HashMap;
