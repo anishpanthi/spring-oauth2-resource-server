@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Log4j2
-public class ApiJwkSetUriAuthenticationManagerResolver implements
+public class ApiAuthenticationManagerResolver implements
     AuthenticationManagerResolver<HttpServletRequest> {
 
   /**

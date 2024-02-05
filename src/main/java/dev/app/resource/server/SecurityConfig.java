@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Log4j2
 public class SecurityConfig {
 
-  private final ApiJwkSetUriAuthenticationManagerResolver authenticationManagerResolver;
+  private final ApiAuthenticationManagerResolver authenticationManagerResolver;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
