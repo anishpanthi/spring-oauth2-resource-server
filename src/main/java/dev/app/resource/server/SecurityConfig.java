@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
@@ -28,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 public class SecurityConfig {
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChainForB2CLogin(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(
             authorizeRequests ->
                 authorizeRequests
@@ -36,8 +35,11 @@ public class SecurityConfig {
                     .permitAll()
                     .anyRequest()
                     .authenticated())
-//            .oauth2Login(Customizer.withDefaults());
-        .oauth2Login(oauth2 -> oauth2.tokenEndpoint(tokenEndpoint -> tokenEndpoint.accessTokenResponseClient(this::getTokenResponse)));
+        .oauth2Login(
+            oauth2 ->
+                oauth2.tokenEndpoint(
+                    tokenEndpoint ->
+                        tokenEndpoint.accessTokenResponseClient(this::getTokenResponse)));
     return http.build();
   }
 
@@ -60,12 +62,22 @@ public class SecurityConfig {
   }
 
   private Converter<Map<String, Object>, OAuth2AccessTokenResponse> getConverter() {
-    return map ->
-        OAuth2AccessTokenResponse.withToken((String) map.get("id_token"))
+    return map -> {
+      if (map.getOrDefault("access_token", "empty").toString().equalsIgnoreCase("empty")) {
+        return OAuth2AccessTokenResponse.withToken((String) map.get("id_token"))
             .tokenType(OAuth2AccessToken.TokenType.BEARER)
             .scopes(Set.of(map.get("scope").toString()))
             .expiresIn(Long.parseLong(String.valueOf(map.get("not_before"))))
             .additionalParameters(Map.of("id_token", map.get("id_token")))
             .build();
+      } else {
+        return OAuth2AccessTokenResponse.withToken((String) map.get("access_token"))
+            .tokenType(OAuth2AccessToken.TokenType.BEARER)
+            .scopes(Set.of(map.get("scope").toString()))
+            .expiresIn(Long.parseLong(String.valueOf(map.get("expires_in"))))
+            .additionalParameters(Map.of("id_token", map.get("id_token")))
+            .build();
+      }
+    };
   }
 }

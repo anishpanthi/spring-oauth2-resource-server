@@ -17,12 +17,12 @@ public class ApiController {
   @GetMapping("/api/greet")
   public Map<String, String> greet() {
     return Map.of(
-        "message", "Hello World! Welcome to Java Peer Group Session: Season 2, Episode 1");
+        "message", "Hello World! Welcome to Java Peer Group Session: Season 2, Episode 2");
   }
 
   @GetMapping
   public Map<String, Object> secure(@AuthenticationPrincipal OidcUser oidcUser) {
-    log.info("User: {}", oidcUser);
+    log.info("User details: {}", oidcUser);
     return Map.of(
         "message",
         "Hello World! Welcome to Java Peer Group Session: Season 2, Episode 2",

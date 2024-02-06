@@ -22,9 +22,9 @@ spring:
           okta:
             issuer-uri: https://dev-09980417.okta.com
           azure-b2c:
-            authorization-uri: https://{tenant}.b2clogin.com/{tenant}.onmicrosoft.com/{policy}/oauth2/v2.0/authorize
-            jwk-set-uri: https://{tenant}.b2clogin.com/{tenant}.onmicrosoft.com/{policy}/discovery/v2.0/keys
-            token-uri: https://{tenant}.b2clogin.com/{tenant}.onmicrosoft.com/{policy}/oauth2/v2.0/token
+            authorization-uri: https://pamiadu.b2clogin.com/pamiadu.onmicrosoft.com/b2c_1_pamiadu/oauth2/v2.0/authorize
+            jwk-set-uri: https://pamiadu.b2clogin.com/pamiadu.onmicrosoft.com/b2c_1_pamiadu/discovery/v2.0/keys
+            token-uri: https://pamiadu.b2clogin.com/pamiadu.onmicrosoft.com/b2c_1_pamiadu/oauth2/v2.0/token
         registration:
           azure-b2c:
             provider: azure-b2c
