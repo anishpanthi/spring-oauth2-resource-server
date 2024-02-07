@@ -25,7 +25,9 @@ public class SecurityConfig {
 
     //    JwtIssuerAuthenticationManagerResolver authenticationManagerResolver =
     //        JwtIssuerAuthenticationManagerResolver.fromTrustedIssuers(
-    //            "https://dev-09980417.okta.com/oauth2/default");
+    //            "https://dev-09980417.okta.com/oauth2/default",
+    //
+    // "https://anishpanthi41gmail.b2clogin.com/tfp/1b286c40-c2fd-46d5-a553-b6502b89f42d/b2x_1_anish/v2.0/");
 
     http.authorizeHttpRequests(
             request ->

@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ApiController {
 
-  @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+  @PreAuthorize("hasAnyAuthority('SCOPE_READ_ME','SCOPE_my_data','SCOPE_ADMIN')")
   @GetMapping("/greet")
   public Map<String, String> greet() {
     return Map.of(
-        "message", "Hello World! Welcome to Java Peer Group Session: Season 2, Episode 1");
+        "message", "Hello World! Welcome to Java Peer Group Session: Season 2, Episode 2");
   }
 }

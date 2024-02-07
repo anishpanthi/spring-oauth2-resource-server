@@ -21,11 +21,11 @@ import org.springframework.web.client.RestClient;
 public class ApiJwtDecoder implements JwtDecoder {
 
   private final Map<String, String> jwkSetUri;
-  private final String authType;
+  private final String issuer;
 
-  ApiJwtDecoder(Map<String, String> jwkSetUri, String authType) {
+  ApiJwtDecoder(Map<String, String> jwkSetUri, String issuer) {
     this.jwkSetUri = jwkSetUri;
-    this.authType = authType;
+    this.issuer = issuer;
   }
 
   /**
@@ -35,14 +35,17 @@ public class ApiJwtDecoder implements JwtDecoder {
    */
   @Override
   public Jwt decode(String token) throws JwtException {
-    if (this.authType.equals("OAuth")) {
-      return JwtDecoders.fromIssuerLocation(jwkSetUri.get("OAuth")).decode(token);
+    if (this.issuer.equalsIgnoreCase("okta")) {
+      return JwtDecoders.fromIssuerLocation(jwkSetUri.get("okta")).decode(token);
+    } else if (this.issuer.equalsIgnoreCase("b2c")) {
+      return JwtDecoders.fromIssuerLocation(jwkSetUri.get("b2c")).decode(token);
     } else {
       JWTClaimsSet claims;
       SignedJWT signedJWT;
       try {
-//        TODO: JWKSet jwkSet = JWKSet.load(new URI("https://apitest.hms.com/keys/v1").toURL());
-//        TODO: Validate signature before parsing the token
+        //        TODO: JWKSet jwkSet = JWKSet.load(new
+        // URI("https://apitest.hms.com/keys/v1").toURL());
+        //        TODO: Validate signature before parsing the token
 
         signedJWT = SignedJWT.parse(token);
         claims = signedJWT.getJWTClaimsSet();
@@ -80,9 +83,7 @@ public class ApiJwtDecoder implements JwtDecoder {
             signedJWT.getHeader().toJSONObject(),
             claimsMap);
 
-      } catch (ParseException
-               | IllegalArgumentException
-               | NullPointerException e) {
+      } catch (ParseException | IllegalArgumentException | NullPointerException e) {
         throw new RuntimeException(e);
       }
     }

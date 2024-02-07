@@ -12,13 +12,5 @@ logging:
     org.springframework.security: debug
     dev.app.resource.server: debug
 
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-#          issuer-uri: https://dev-09980417.okta.com/oauth2/default
-          jwk-set-uri: https://apitest.hms.com/keys/v1
-
 # Look for JwtAuthenticationProvider
 # Look for ProviderManager
