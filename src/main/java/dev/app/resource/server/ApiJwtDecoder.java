@@ -43,9 +43,10 @@ public class ApiJwtDecoder implements JwtDecoder {
       JWTClaimsSet claims;
       SignedJWT signedJWT;
       try {
-        //        TODO: JWKSet jwkSet = JWKSet.load(new
-        // URI("https://apitest.hms.com/keys/v1").toURL());
-        //        TODO: Validate signature before parsing the token
+        /**
+         * This is the place where you have to implement your own logic to decode the token.
+         * Make sure to verify the signature of the token using the public key of the issuer.
+         */
 
         signedJWT = SignedJWT.parse(token);
         claims = signedJWT.getJWTClaimsSet();
@@ -60,7 +61,7 @@ public class ApiJwtDecoder implements JwtDecoder {
             RestClient.builder()
                 .build()
                 .get()
-                .uri("https://apitest.hms.com/hmsuseraccesslist/?appl=tmv&env=test")
+                .uri("<your-authz-url-which-returns-user-roles>")
                 .header("Authorization", userId)
                 .retrieve()
                 .body(UserInfo.class);

@@ -32,8 +32,8 @@ public class ApiAuthenticationManagerResolver
             "https://dev-09980417.okta.com/oauth2/default",
             "b2c",
             "https://anishpanthi41gmail.b2clogin.com/tfp/1b286c40-c2fd-46d5-a553-b6502b89f42d/b2x_1_anish/v2.0/",
-            "l7",
-            "https://apitest.hms.com/keys/v1");
+            "your-non-oauth-issuer",
+            "https://your-domain/keys/v1");
 
     var issuer = context.getHeader("issuer");
     JwtDecoder jwtDecoder = new ApiJwtDecoder(jwkSetUriMap, issuer);

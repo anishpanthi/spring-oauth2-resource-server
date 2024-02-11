@@ -17,6 +17,6 @@ public class ApiController {
   @GetMapping("/greet")
   public Map<String, String> greet() {
     return Map.of(
-        "message", "Hello World! Welcome to Java Peer Group Session: Season 2, Episode 2");
+        "message", "Hello World! Welcome to OAuth2.0 & OpenID Connect");
   }
 }
