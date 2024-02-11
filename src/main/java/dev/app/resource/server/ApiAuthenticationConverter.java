@@ -1,6 +1,10 @@
 package dev.app.resource.server;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +44,18 @@ public class ApiAuthenticationConverter implements Converter<Jwt, AbstractAuthen
     return new JwtAuthenticationToken(jwt, authorities, jwt.getClaim("uid"));
   }
 
+  /**
+   * The below method is the implementation for my use case. I've a 2 different endpoints, which
+   * takes care of AuthN and AuthZ. The AuthZ endpoint returns the roles for the user. The below
+   * method is used to extract the roles from the JWT token and then call the AuthZ endpoint to get
+   * the roles for the user.
+   * <p>
+   * Not everyone will have this use case, so you can ignore this method and use the default
+   * implementation.
+   *
+   * @param jwt the JWT token
+   * @return the roles
+   */
   private Collection<GrantedAuthority> extractRoles(Jwt jwt) {
     var userId = jwt.getClaimAsString("uid");
     if (userId == null) {

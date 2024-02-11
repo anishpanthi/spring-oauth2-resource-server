@@ -13,7 +13,6 @@ public record UserInfo(
     String uid,
     String givenName,
     String sn,
-    String ecenteraccountname,
     String providerid,
     String mail,
     String displayName,
