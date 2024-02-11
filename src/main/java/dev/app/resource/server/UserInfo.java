@@ -22,4 +22,6 @@ public record UserInfo(
     List<Group> group,
     Long iat,
     Long exp,
-    Long nbf) {}
+    Long nbf) {
+
+}

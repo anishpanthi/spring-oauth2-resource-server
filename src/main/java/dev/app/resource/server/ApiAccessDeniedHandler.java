@@ -24,7 +24,8 @@ import org.springframework.stereotype.Component;
 public class ApiAccessDeniedHandler implements AccessDeniedHandler {
 
   private final ObjectMapper objectMapper;
-  @Setter private String realmName;
+  @Setter
+  private String realmName;
 
   private static String computeWWWAuthenticateHeaderValue(Map<String, String> parameters) {
     var wwwAuthenticate = new StringBuilder();

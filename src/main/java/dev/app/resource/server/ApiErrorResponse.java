@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 
 /**
- * @param timeStamp - String
- * @param errorCode - String
+ * @param timeStamp  - String
+ * @param errorCode  - String
  * @param resultType - String
  * @param apiMessage - String
  */

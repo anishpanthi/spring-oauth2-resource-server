@@ -31,7 +31,8 @@ import org.springframework.util.StringUtils;
 public class ApiAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 
   private final ObjectMapper objectMapper;
-  @Setter private String realmName;
+  @Setter
+  private String realmName;
 
   private static String computeWWWAuthenticateHeaderValue(Map<String, String> parameters) {
     var wwwAuthenticate = new StringBuilder();
@@ -52,10 +53,10 @@ public class ApiAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
   }
 
   /**
-   * @param request - HttpServletRequest
-   * @param response - HttpServletResponse
+   * @param request       - HttpServletRequest
+   * @param response      - HttpServletResponse
    * @param authException - AuthenticationException
-   * @throws IOException - IOException
+   * @throws IOException      - IOException
    * @throws ServletException - ServletException
    */
   @Override
